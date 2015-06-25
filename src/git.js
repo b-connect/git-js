@@ -42,6 +42,17 @@
     };
 
     /**
+     * Sets a uid for the acting user with the git command
+     *
+     * @param {string} command
+     * @returns {Git}
+     */
+    Git.prototype.setUid = function (command) {
+        this._uid = uid;
+        return this;
+    };
+
+    /**
      * Sets a handler function to be called whenever a new child process is created, the handler function will be called
      * with the name of the command being run and the stdout & stderr streams used by the ChildProcess.
      *
@@ -648,9 +659,13 @@
 
             var stdOut = [];
             var stdErr = [];
-            var spawned = ChildProcess.spawn(this._command, command.slice(0), {
-                cwd: this._baseDir
-            });
+            var ops = {};
+            opts.cwd = this._baseDir;
+            if ( this._uid ) {
+              opts._uid = uid ;
+            }
+
+            var spawned = ChildProcess.spawn(this._command, command.slice(0), opts);
 
             spawned.stdout.on('data', function (buffer) { stdOut.push(buffer); });
             spawned.stderr.on('data', function (buffer) { stdErr.push(buffer); });
