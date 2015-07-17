@@ -47,7 +47,7 @@
      * @param {string} command
      * @returns {Git}
      */
-    Git.prototype.setUid = function (command) {
+    Git.prototype.setUid = function (uid) {
         this._uid = uid;
         return this;
     };
@@ -659,10 +659,10 @@
 
             var stdOut = [];
             var stdErr = [];
-            var ops = {};
+            var opts = {};
             opts.cwd = this._baseDir;
             if ( this._uid ) {
-              opts._uid = uid ;
+              opts._uid = this._uid ;
             }
 
             var spawned = ChildProcess.spawn(this._command, command.slice(0), opts);
